@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>PRODUCT ENGINEERING TEST LAB</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>PRODUCT ENGINEERING TEST LAB</h1>
+
+<div class="live">
+LIVE RUNNING
+</div>
+
+</div>
+
+<div class="top-bar">
+
+<form method="GET" action="/">
+
+<input
+type="text"
+name="search"
+placeholder="Search Machine / Customer">
+
+<button type="submit">
+SEARCH
+</button>
+
+</form>
+
+<form method="GET" action="/pdf">
+
+<input type="date" name="from_date" required>
+
+<input type="date" name="to_date" required>
+
+<select name="shift_name">
+
+<option value="">ALL SHIFT</option>
+
+<option>1st Shift</option>
+
+<option>2nd Shift</option>
+
+<option>3rd Shift</option>
+
+</select>
+
+<button
+type="submit"
+class="pdf-btn">
+
+DOWNLOAD PDF
+
+</button>
+
+</form>
+
+<a href="/excel">
+
+<button class="excel-btn">
+
+DOWNLOAD EXCEL
+
+</button>
+
+</a>
+
+<a href="/email_report">
+
+<button class="email-btn">
+
+SEND EMAIL
+
+</button>
+
+</a>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>Total Records</h2>
+
+<h1>{{ records|length }}</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Total Machine</h2>
+
+<h1>10</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Running</h2>
+
+<h1>{{ running_count }}</h1>
+
+</div>
+
+<div class="card">
+
+<h2>Stopped</h2>
+
+<h1>{{ stopped_count }}</h1>
+
+</div>
+
+</div>
+
+<div class="chart-container">
+
+<canvas id="statusChart"></canvas>
+
+</div>
+
+<div class="form-container">
+
+<h2>Add Machine Record</h2>
+
+<form action="/save" method="POST">
+
+<div class="form-grid">
+
+<select name="machine_name" required>
+
+<option value="">
+Select Machine
+</option>
+
+<option>STALLION1</option>
+<option>STALLION3</option>
+<option>HOT CHAMBER</option>
+<option>COLD CHAMBER</option>
+<option>MUDDY PUMB</option>
+<option>ENDURA</option>
+<option>MARATHON</option>
+<option>INDURA</option>
+<option>GENURA</option>
+<option>FUTURA</option>
+
+</select>
+
+<input
+type="text"
+name="subject_name"
+placeholder="Subject"
+required>
+
+<input
+type="text"
+name="customer_name"
+placeholder="Customer"
+required>
+
+<input
+type="number"
+name="cycle_count"
+placeholder="Cycle Count"
+required>
+
+<select name="machine_status">
+
+<option>RUNNING</option>
+
+<option>COMPLETED</option>
+
+<option>STOPPED</option>
+
+<option>MAINTENANCE</option>
+
+</select>
+
+<select name="shift_name">
+
+<option>1st Shift</option>
+
+<option>2nd Shift</option>
+
+<option>3rd Shift</option>
+
+</select>
+
+<input
+type="text"
+name="person_name"
+placeholder="Person Name"
+required>
+
+<textarea
+name="reason_for_running"
+placeholder="Reason For Running"
+required></textarea>
+
+</div>
+
+<div class="actions">
+
+<button type="submit">
+
+SAVE RECORD
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+
+<th>SNO</th>
+<th>Machine</th>
+<th>Subject</th>
+<th>Customer</th>
+<th>Cycles</th>
+<th>Status</th>
+<th>Shift</th>
+<th>Person</th>
+<th>Time</th>
+
+</tr>
+
+{% for row in records %}
+
+<tr>
+
+<td>{{ row[0] }}</td>
+<td>{{ row[1] }}</td>
+<td>{{ row[2] }}</td>
+<td>{{ row[3] }}</td>
+<td>{{ row[7] }}</td>
+<td>{{ row[8] }}</td>
+<td>{{ row[5] }}</td>
+<td>{{ row[6] }}</td>
+<td>{{ row[9] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<script>
+
+new Chart(document.getElementById('statusChart'), {
+
+type: 'pie',
+
+data: {
+
+labels: [
+
+'RUNNING',
+'STOPPED',
+'MAINTENANCE'
+
+],
+
+datasets: [{
+
+data: [
+
+{{ running_count }},
+{{ stopped_count }},
+{{ maintenance_count }}
+
+]
+
+}]
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
